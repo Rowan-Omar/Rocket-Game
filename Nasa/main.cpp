@@ -211,9 +211,6 @@ bool BoundingBoxTest(const sf::Sprite& Object1, const sf::Sprite& Object2)
 
 
 
-
-
-
 int random(int min, int max) //range : [min, max]
 {
     static bool first = true;
@@ -230,6 +227,13 @@ int main()
     Clock clock = Clock();
     ContextSettings settings;
     settings.antialiasingLevel = 8;
+
+    double pi=3.14;
+    bool left = false, right = false,up=false,damage=false,play=true;
+    int evilBallXPosition = 0,fuel=500,heart = 5,maxRotation = 50, roc_width,roc_height,roc_x,roc_y,fire_x,fire_y, width_dif;
+    float speed = 1,speedX = 0,gravity = 0.01,levelGrav=0.01,angleRot=0;
+    int time=0,counter=0;
+
     RenderWindow window(VideoMode(1280, 720), "Rocket Game!", Style::Default, settings);
     window.setFramerateLimit(30);
 
@@ -331,23 +335,15 @@ int main()
     int size = 50;
 
 
-    double pi=3.14;
-    bool left = false, right = false,up=false,damage=false,play=true;
-    int evilBallXPosition = 0,fuel=1000,heart = 5,maxRotation = 50, roc_width,roc_height,roc_x,roc_y,fire_x,fire_y, width_dif;
-    float speed = 1,speedX = 0,gravity = 0.04,levelGrav=0.01,angleRot=0;
-    int time=0,counter=0;
+
 
     while (window.isOpen())
     {
         Time ElapsedTime = clock.restart();
-        // auto start = high_resolution_clock::now();
 
         counter+=1;
         time += counter%60;
 
-
-        // Get ending timepoint
-        ///auto stop = high_resolution_clock::now();
 
         Event event;
 
@@ -371,13 +367,16 @@ int main()
                 }
 
 
-
                 if(event.key.code == Keyboard::A)
                 {
 
                     up = true;
                     levelGrav=0.001;
                     fuel-=1;
+                    if(fuel<=0){
+                            fuel=0;
+                        levelGrav=0;
+                    }
                     fireSp.setScale(0.25,0.25);
                 }
                 if(event.key.code == Keyboard::S)
@@ -385,6 +384,10 @@ int main()
                     up = true;
                     levelGrav=0.002;
                     fuel-=2;
+                    if(fuel<=0){
+                            fuel=0;
+                        levelGrav=0;
+                    }
                     fireSp.setScale(0.25,0.25);
 
                 }
@@ -393,6 +396,10 @@ int main()
                     up = true;
                     levelGrav=0.0022;
                     fuel-=3;
+                    if(fuel<=0){
+                            fuel=0;
+                        levelGrav=0;
+                    }
                     fireSp.setScale(0.25,0.25);
 
                 }
@@ -401,16 +408,21 @@ int main()
                     up = true;
                     levelGrav=0.009;
                     fuel-=5;
+                    if(fuel<=0){
+                            fuel=0;
+                        levelGrav=0;
+                    }
                     fireSp.setScale(0.3,0.3);
                 }
 
-                if(event.key.code == Keyboard::R)
+                if(!play && event.key.code == Keyboard::R)
                 {
                     play=true;
                     angleRot = player.getRotation();
                     gravity=levelGrav;
                     player.setPosition(640, 50);
                     time=0;
+                    fuel= 500;
 
                 }
             }
@@ -579,8 +591,6 @@ int main()
                 }
             }
 
-
-
         }
 
         //<--draw here-->
@@ -589,7 +599,7 @@ int main()
             expsp.setPosition(player.getPosition().x,player.getPosition().y);
 
             window.draw(expsp);
-            cout<<player.getRotation()<<"dsf"<<endl;
+            //cout<<player.getRotation()<<"dsf"<<endl;
             player.rotate(-player.getRotation());
             fireSp.rotate(-player.getRotation());
             //Sleep(10000);
@@ -626,8 +636,8 @@ int main()
 
             window.draw(player);
 
-            if(up)
-                window.draw(fireSp);
+            //fif(up)
+               // window.draw(fireSp);
 
             window.draw(sLand);
             if((int)player.getRotation()==0)
