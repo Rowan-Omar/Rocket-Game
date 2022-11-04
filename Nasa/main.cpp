@@ -272,13 +272,18 @@ int main()
     fireSp.setOrigin(0,0) ;
 
 
-    SoundBuffer buffer;
-    if (!buffer.loadFromFile("audio/break.wav"))
+    SoundBuffer expBuffer, bgBuffer,fireBuffer;
+    if (!expBuffer.loadFromFile("audio/break.wav"))
         return -1;
-    Sound sound;
-    sound.setBuffer(buffer);
+    if(!bgBuffer.loadFromFile("audio/bg.wav"));
+    if (!fireBuffer.loadFromFile("audio/fire.wav"))
+        return -1;
+    Sound expSound, bgSound, fireSound;
 
-
+    fireSound.setBuffer(fireBuffer);
+    expSound.setBuffer(expBuffer);
+    bgSound.setBuffer(bgBuffer);
+    bgSound.play();
 
     Font font;
     font.loadFromFile("Roboto.ttf");
@@ -413,6 +418,8 @@ int main()
                         levelGrav=0;
                     }
                     fireSp.setScale(0.3,0.3);
+
+                    fireSound.play();
                 }
 
                 if(!play && event.key.code == Keyboard::R)
@@ -578,13 +585,13 @@ int main()
                     {
                         damage=true;
                         play=false;
-                        sound.play();
+                        expSound.play();
                     }
                 }
                 else
                 {
                     damage=true;
-                    sound.play();
+                    expSound.play();
                     play=false;
                     //   player.setPosition(window.getSize().x/2, window.getSize().y/2);
 
